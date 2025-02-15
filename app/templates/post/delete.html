@@ -1,0 +1,8 @@
+{% extends 'main/base.html'%}
+{%block title %} удаление темы {{post.id}}{% endblock %}
+{% block content %}
+<form method="post" class="form-control d-flex flex-column gap-2">
+    <input value="Вы действительно хотите удалить тему {{post.subject}}" type="submit" class="btn btn-danger">
+</form>
+<a href="{{url_for('post.all')}}" class="btn btn-sm btn-secondary">Назад</a>
+{% endblock %}

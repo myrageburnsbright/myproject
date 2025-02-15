@@ -1,0 +1,22 @@
+{% extends 'main/base.html'%}
+{%block title %} редактивроания темы "{{post.subject}}" {% endblock %}
+{% block content %}
+<form method="post" class="form-control d-flex flex-column gap-2">
+    {{form.csrf_token}}
+    <div class="d-flex flex-row gap-5 ">
+        <div >
+        Автор</div>
+        <div class="flex-grow-1"> {{post.author.name}} </div>  
+    </div>
+    <div class="d-flex flex-row gap-1 justify-content-start">
+        {{form.subject.label}} 
+        <div class="flex-grow-1">{{form.subject(class="form-control", placeholder="Тема")}}</div> 
+    </div>
+    <div class="d-flex flex-row gap-1 justify-content-start">
+        {{studentForm.student.label}} 
+        <div class="flex-grow-1">{{studentForm.student(class="form-control", placeholder="ФИО студента")}}</div> 
+    </div>
+    {{form.submit(class="btn btn-success")}}
+</form>
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'main/base.html'%}
+{%block title %} Все темы {% endblock %}
+{%block style %} 
+    {% assets 'post_all_css' %}
+        <link rel="stylesheet" href="{{ASSET_URL}}">
+    {% endassets %}
+{% endblock %}
+
+
+{%block content %}
+
+<form method="post" class="form-control d-flex flex-row gap-2" id="teacherForm">
+    {{form.csrf_token }}
+    {{form.teacher }}
+    <input type="submit" class="btn btn-success" value="показать">
+</form>
+
+<div class="table-responsive custom-table-responsive">
+    <table class="table custom-table">
+
+        <thead>
+            <tr>
+                <th scope="col">
+                    <a href="{{url_for('post.all',orderby='teacher')}}">Преподаватель</a>
+                </th>
+                <th scope="col">
+                    <a href="{{url_for('post.all',orderby='subject')}}">Тема</a>
+                </th>
+                <th scope="col">
+                    <a href="{{url_for('post.all',orderby='student')}}">ФИО студента</a>
+                </th>
+                {% if current_user.is_authenticated %}
+                <th scope="col">действие
+                </th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts%}
+            <tr scope="row">
+                <td>
+                    <img width="46px" height="46px" src="{{url_for('static', filename='upload/'+ post.author.avatar)}}" alt="Преподаватель">
+                    {{post.author.name}}
+                </td>
+                <td>{{post.subject}}
+                </td>
+                <td>
+                    {% with student=user.query.get(post.student) %}
+                    <img width="46px" height="46px" src="{{url_for('static', filename='upload/'+ student.avatar)}}" alt="Студент">
+                     {{ student.name }}
+                    {% endwith %}
+                </td>
+                
+                <td>
+                    {% if current_user.is_authenticated and post.author.id == current_user.id %}
+                    <a href="{{url_for('post.update',id=post.id)}}" class="btn btn-sm btn-primary">Ред.</a>
+                    <a href="{{url_for('post.delete',id=post.id)}}" class="btn btn-sm btn-danger">Удалить</a>
+                    <a href="{{url_for('post.like',id=post.id)}}" class="btn btn-sm btn-success">Like 
+                        
+                        {% if post.likes > 0 %}
+                            {{post.likes}}
+                        {% endif%}
+                    </a>
+                    <a href="{{url_for('post.dislike',id=post.id)}}" class="btn btn-sm btn-secondary">Diz
+                        {% if post.likes < 0 %}
+                            {{(-1) * post.likes}}
+                        {% endif%}
+                    </a>
+                    {% endif  %}
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody> 
+    </table>
+</div>
+{% endblock %}
+
+{%block script %} 
+    {% assets 'post_all_js' %}
+    <script  type="text/javascript" src="{{ASSET_URL}}"> </script>
+    {% endassets %}
+{% endblock %}
